@@ -104,5 +104,6 @@ func Start() {
 		// clearScreen()
 		fmt.Println("This is the new state of the service:")
 		prettyPrintService(serviceName)
+		fmt.Println("-------------------------------------")
 	}
 }

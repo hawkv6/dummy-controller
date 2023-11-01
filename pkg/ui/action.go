@@ -40,19 +40,18 @@ func reorderSids(domainName string, intent string) {
 }
 
 func addToPosition(domainName string, intent string, sid string, position string) {
+	newSidList := []string{}
 	for i, service := range config.Params.Services[domainName] {
 		if service.Intent == intent {
-			for j, s := range service.Sid {
-				if s == sid {
-					switch position {
-					case AddFront:
-						config.Params.Services[domainName][i].Sid = append([]string{sid}, service.Sid[:j]...)
-					case AddBack:
-						config.Params.Services[domainName][i].Sid = append(service.Sid[:j], sid)
-					}
-					return
-				}
+			switch position {
+			case AddFront:
+				newSidList = append(newSidList, sid)
+				newSidList = append(newSidList, service.Sid...)
+			case AddBack:
+				newSidList = append(newSidList, service.Sid...)
+				newSidList = append(newSidList, sid)
 			}
+			config.Params.Services[domainName][i].Sid = newSidList
 		}
 	}
 }
