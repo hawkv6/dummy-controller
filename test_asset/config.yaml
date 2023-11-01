@@ -1,0 +1,13 @@
+---
+address: "[::]"
+port: 5001
+services:
+  wb.hawk.net:
+    - intent: high-bandwidth
+      sid:
+        - fcbb:bb00:1::2
+        - fcbb:bb00:3::2
+    - intent: low-bandwidth
+      sid:
+        - fcbb:bb00:2::2
+        - fcbb:bb00:4::2

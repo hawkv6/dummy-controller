@@ -1,1 +1,2 @@
-# dummy-controller
+# Hawkv6 Dummy Controller
+This is a dummy controller for the Hawkv6 project. It is intended to be used as a test controller for the hawkwing project. It is not intended to be used in a production environment.
