@@ -6,7 +6,7 @@ import (
 	"github.com/manifoldco/promptui"
 )
 
-func Test() {
+func Start() {
 	for {
 		prompt := promptSelectService()
 		_, serviceName, err := prompt.Run()

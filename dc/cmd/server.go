@@ -18,7 +18,7 @@ var serverCmd = &cobra.Command{
 		fmt.Println("Starting dummy-controller server...")
 		server := messaging.NewMessagingServer()
 		go server.Start()
-		ui.Test()
+		ui.Start()
 		c := make(chan os.Signal, 1)
 		signal.Notify(c, syscall.SIGINT, syscall.SIGTERM)
 		<-c
