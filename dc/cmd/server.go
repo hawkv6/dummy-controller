@@ -7,6 +7,7 @@ import (
 	"syscall"
 
 	"github.com/hawkv6/dummy-controller/pkg/messaging"
+	"github.com/hawkv6/dummy-controller/pkg/ui"
 	"github.com/spf13/cobra"
 )
 
@@ -16,7 +17,8 @@ var serverCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("Starting dummy-controller server...")
 		server := messaging.NewMessagingServer()
-		server.Start()
+		go server.Start()
+		ui.Test()
 		c := make(chan os.Signal, 1)
 		signal.Notify(c, syscall.SIGINT, syscall.SIGTERM)
 		<-c

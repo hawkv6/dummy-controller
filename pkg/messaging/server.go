@@ -9,6 +9,7 @@ import (
 
 	"github.com/hawkv6/dummy-controller/internal/config"
 	"github.com/hawkv6/dummy-controller/pkg/api"
+	"github.com/hawkv6/dummy-controller/pkg/intent"
 	"google.golang.org/grpc"
 )
 
@@ -35,12 +36,16 @@ func (s *MessagingServer) Start() {
 	}
 }
 
-func (s *MessagingServer) GetIntentDetails(ctx context.Context, intent *api.Intent) (*api.Response, error) {
+func (s *MessagingServer) GetIntentDetails(ctx context.Context, i *api.Intent) (*api.Response, error) {
+	sidList, err := intent.GetIntentDetails(i.DomainName, intent.IntentTypeToString(*i.Intent.Enum()))
+	if err != nil {
+		response := &api.Response{
+			Ipv6Addresses: nil,
+		}
+		return response, err
+	}
 	response := &api.Response{
-		Ipv6Addresses: []string{
-			"2001:0db8:85a3:0000:0000:8a2e:0370:7334",
-			"2001:0db8:85a3:0000:0000:8a2e:0370:7335",
-		},
+		Ipv6Addresses: sidList,
 	}
 
 	return response, nil
