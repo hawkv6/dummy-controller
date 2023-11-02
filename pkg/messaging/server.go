@@ -45,6 +45,8 @@ func (s *MessagingServer) GetIntentDetails(ctx context.Context, i *api.Intent) (
 		return response, err
 	}
 	response := &api.Response{
+		DomainName:    i.DomainName,
+		Intent:        i.Intent,
 		Ipv6Addresses: sidList,
 	}
 
