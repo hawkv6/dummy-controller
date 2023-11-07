@@ -1,9 +1,8 @@
 module github.com/hawkv6/dummy-controller
 
-go 1.20
+go 1.21
 
 require (
-	github.com/manifoldco/promptui v0.9.0
 	github.com/spf13/cobra v1.7.0
 	github.com/spf13/viper v1.17.0
 	google.golang.org/grpc v1.59.0
@@ -11,7 +10,6 @@ require (
 )
 
 require (
-	github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e // indirect
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
