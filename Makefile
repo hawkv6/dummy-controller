@@ -18,7 +18,7 @@ update-submodules: ## Update submodules
 	git submodule update --remote --merge
 
 generate-proto: ## Generate Go code from proto files
-	protoc --go_out=. --go_opt=Mproto/intent.proto=pkg/api --go-grpc_out=. --go-grpc_opt=Mproto/intent.proto=pkg/api proto/*.proto
+	protoc --go_out=. --go_opt=Mproto/intent.proto=pkg/api --go-grpc_out=. --go-grpc_opt=Mproto/intent.proto=pkg/api proto/*.proto --experimental_allow_proto3_optional
 
 go-run: ## Run the server with go run
 	go run dc/main.go server --config test_asset/config.yaml
@@ -28,6 +28,9 @@ build: ## Build the server
 
 run: ## Run the server
 	./out/bin/dummy-controller server --config test_asset/config.yaml
+
+run-in-namespace: ## Run the server in a namespace
+	sudo ip netns exec ns-beyond-ctrl ./out/bin/dummy-controller server --config test_asset/config.yaml
 
 help: ## Show this help message
 	@echo ''

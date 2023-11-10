@@ -2,17 +2,33 @@
 address: "[::]"
 port: 5001
 services:
-  wb.hawk.net:
-    - intent: high-bandwidth
-      sid:
-        - fcbb:bb00:1::2
-        - fcbb:bb00:3::2
-    - intent: low-bandwidth
-      sid:
-        - fcbb:bb00:2::2
-        - fcbb:bb00:4::2
-  wc.hawk.net:
-    - intent: high-bandwidth
-      sid:
-        - fcbb:bb00:1::2
-        - fcbb:bb00:3::2
+  webserver-b:
+    ipv6_addresses:
+      - fcbb:cc00:2::a
+    intents:
+      - intent: low-latency
+        sid:
+          - fcbb:bb00:1::2
+          - fcbb:bb00:3::2
+      - intent: high-latency
+        sid:
+          - fcbb:bb00:1::2
+          - fcbb:bb00:3::2
+  webserver-c:
+    ipv6_addresses:
+      - fcbb:cc00:3::a
+    intents:
+      - intent: high-bandwidth
+        sid: 
+          - fcbb:bb00:1::2
+          - fcbb:bb00:3::2
+  webserver-d:
+    ipv6_addresses:
+      - fcbb:cc00:4::a
+      - fcbb:cc00:4::b
+      - fcbb:cc00:4::c
+    intents:
+      - intent: high-bandwidth
+        sid: 
+          - fcbb:bb00:1::2
+          - fcbb:bb00:3::2

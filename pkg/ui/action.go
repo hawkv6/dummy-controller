@@ -5,11 +5,11 @@ import (
 )
 
 func deleteSid(domainName string, intent string, sid string) {
-	for i, service := range config.Params.Services[domainName] {
-		if service.Intent == intent {
-			for j, s := range service.Sid {
+	for k, i := range config.Params.Services[domainName].Intents {
+		if i.Intent == intent {
+			for j, s := range i.Sid {
 				if s == sid {
-					config.Params.Services[domainName][i].Sid = append(service.Sid[:j], service.Sid[j+1:]...)
+					config.Params.Services[domainName].Intents[k].Sid = append(i.Sid[:j], i.Sid[j+1:]...)
 					return
 				}
 			}
@@ -18,11 +18,11 @@ func deleteSid(domainName string, intent string, sid string) {
 }
 
 func changeSidValue(domainName string, intent string, sid string, newValue string) {
-	for i, service := range config.Params.Services[domainName] {
-		if service.Intent == intent {
-			for j, s := range service.Sid {
+	for k, i := range config.Params.Services[domainName].Intents {
+		if i.Intent == intent {
+			for j, s := range i.Sid {
 				if s == sid {
-					config.Params.Services[domainName][i].Sid[j] = newValue
+					config.Params.Services[domainName].Intents[k].Sid[j] = newValue
 					return
 				}
 			}
@@ -31,9 +31,9 @@ func changeSidValue(domainName string, intent string, sid string, newValue strin
 }
 
 func reorderSids(domainName string, intent string) {
-	for i, service := range config.Params.Services[domainName] {
-		if service.Intent == intent {
-			config.Params.Services[domainName][i].Sid = append(service.Sid[1:], service.Sid[0])
+	for k, i := range config.Params.Services[domainName].Intents {
+		if i.Intent == intent {
+			config.Params.Services[domainName].Intents[k].Sid = append(i.Sid[1:], i.Sid[0])
 			return
 		}
 	}
@@ -41,17 +41,17 @@ func reorderSids(domainName string, intent string) {
 
 func addToPosition(domainName string, intent string, sid string, position string) {
 	newSidList := []string{}
-	for i, service := range config.Params.Services[domainName] {
-		if service.Intent == intent {
+	for k, i := range config.Params.Services[domainName].Intents {
+		if i.Intent == intent {
 			switch position {
 			case AddFront:
 				newSidList = append(newSidList, sid)
-				newSidList = append(newSidList, service.Sid...)
+				newSidList = append(newSidList, i.Sid...)
 			case AddBack:
-				newSidList = append(newSidList, service.Sid...)
+				newSidList = append(newSidList, i.Sid...)
 				newSidList = append(newSidList, sid)
 			}
-			config.Params.Services[domainName][i].Sid = newSidList
+			config.Params.Services[domainName].Intents[k].Sid = newSidList
 		}
 	}
 }

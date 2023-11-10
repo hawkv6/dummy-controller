@@ -11,15 +11,20 @@ var (
 	Params        Config
 )
 
+type Intent struct {
+	Intent string   `mapstructure:"intent"`
+	Sid    []string `mapstructure:"sid"`
+}
+
 type ServiceConfig struct {
-	Intent string
-	Sid    []string
+	Ipv6Addresses []string `mapstructure:"ipv6_addresses"`
+	Intents       []Intent `mapstructure:"intents"`
 }
 
 type Config struct {
-	Address  string
-	Port     int
-	Services map[string][]ServiceConfig
+	Address  string                   `mapstructure:"address"`
+	Port     int                      `mapstructure:"port"`
+	Services map[string]ServiceConfig `mapstructure:"services"`
 }
 
 func init() {

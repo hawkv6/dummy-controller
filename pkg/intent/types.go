@@ -10,6 +10,10 @@ func IntentTypeToString(intentType api.IntentType) string {
 		return "low-bandwidth"
 	case api.IntentType_INTENT_TYPE_LOW_LATENCY:
 		return "low-latency"
+	case api.IntentType_INTENT_TYPE_FLEX_ALGO:
+		return "flex-algo"
+	case api.IntentType_INTENT_TYPE_SFC:
+		return "sfc"
 	}
 
 	return "unspecified"
@@ -23,6 +27,10 @@ func StringToIntentType(intentType string) api.IntentType {
 		return api.IntentType_INTENT_TYPE_LOW_BANDWIDTH
 	case "low-latency":
 		return api.IntentType_INTENT_TYPE_LOW_LATENCY
+	case "flex-algo":
+		return api.IntentType_INTENT_TYPE_FLEX_ALGO
+	case "sfc":
+		return api.IntentType_INTENT_TYPE_SFC
 	}
 
 	return api.IntentType_INTENT_TYPE_UNSPECIFIED

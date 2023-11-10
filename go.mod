@@ -1,6 +1,6 @@
 module github.com/hawkv6/dummy-controller
 
-go 1.20
+go 1.21
 
 require (
 	github.com/manifoldco/promptui v0.9.0

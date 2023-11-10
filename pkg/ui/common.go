@@ -60,9 +60,9 @@ func promptSelectService() promptui.Select {
 
 func getSidList(domainName string, intentType string) []string {
 	sidList := []string{}
-	for _, sid := range config.Params.Services[domainName] {
-		if sid.Intent == intentType {
-			sidList = append(sidList, sid.Sid...)
+	for _, intent := range config.Params.Services[domainName].Intents {
+		if intent.Intent == intentType {
+			sidList = append(sidList, intent.Sid...)
 		}
 	}
 	return sidList
@@ -77,7 +77,7 @@ func promptSelectSidList(domainName string, intentType string) promptui.Select {
 
 func getIntentList(domainName string) []string {
 	intentList := []string{}
-	for _, intent := range config.Params.Services[domainName] {
+	for _, intent := range config.Params.Services[domainName].Intents {
 		intentList = append(intentList, intent.Intent)
 	}
 	return intentList
@@ -97,8 +97,8 @@ func clearScreen() {
 }
 
 func prettyPrintService(domainName string) {
-	for _, service := range config.Params.Services[domainName] {
-		fmt.Printf("Intent: %s\n", service.Intent)
-		fmt.Printf("SIDs: %v\n", service.Sid)
+	for _, intent := range config.Params.Services[domainName].Intents {
+		fmt.Printf("Intent: %s\n", intent.Intent)
+		fmt.Printf("SIDs: %v\n", intent.Sid)
 	}
 }

@@ -3,10 +3,23 @@ package ui
 import (
 	"fmt"
 
+	"github.com/hawkv6/dummy-controller/pkg/api"
+	"github.com/hawkv6/dummy-controller/pkg/intent"
+	"github.com/hawkv6/dummy-controller/pkg/messaging"
 	"github.com/manifoldco/promptui"
 )
 
-func Start() {
+type UI struct {
+	messagingChannels *messaging.MessagingChannels
+}
+
+func NewUI(messagingChannels *messaging.MessagingChannels) *UI {
+	return &UI{
+		messagingChannels: messagingChannels,
+	}
+}
+
+func (ui *UI) Start() {
 	for {
 		prompt := promptSelectService()
 		_, serviceName, err := prompt.Run()
@@ -15,11 +28,14 @@ func Start() {
 			return
 		}
 
-		fmt.Println("This is the current state of the service:")
-		prettyPrintService(serviceName)
-
 		prompt = promptSelectAction()
 		_, action, err := prompt.Run()
+		if err != nil {
+			fmt.Printf("Prompt failed %v\n", err)
+			return
+		}
+		prompt = promptSelectIntent(serviceName)
+		_, intentName, err := prompt.Run()
 		if err != nil {
 			fmt.Printf("Prompt failed %v\n", err)
 			return
@@ -27,23 +43,10 @@ func Start() {
 
 		switch action {
 		case ReorderSids:
-			prompt := promptSelectIntent(serviceName)
-			_, intent, err := prompt.Run()
-			if err != nil {
-				fmt.Printf("Prompt failed %v\n", err)
-				return
-			}
-			reorderSids(serviceName, intent)
+			reorderSids(serviceName, intentName)
 
 		case ChangeSidValues:
-			prompt := promptSelectIntent(serviceName)
-			_, intent, err := prompt.Run()
-			if err != nil {
-				fmt.Printf("Prompt failed %v\n", err)
-				return
-			}
-
-			prompt = promptSelectSidList(serviceName, intent)
+			prompt = promptSelectSidList(serviceName, intentName)
 			_, sid, err := prompt.Run()
 			if err != nil {
 				fmt.Printf("Prompt failed %v\n", err)
@@ -59,15 +62,9 @@ func Start() {
 				return
 			}
 
-			changeSidValue(serviceName, intent, sid, newValue)
+			changeSidValue(serviceName, intentName, sid, newValue)
 
 		case AddNewSid:
-			prompt := promptSelectIntent(serviceName)
-			_, intent, err := prompt.Run()
-			if err != nil {
-				fmt.Printf("Prompt failed %v\n", err)
-				return
-			}
 			prompt = promptSelectAddingPosition()
 			_, position, err := prompt.Run()
 			if err != nil {
@@ -83,27 +80,28 @@ func Start() {
 				fmt.Printf("Prompt failed %v\n", err)
 				return
 			}
-			addToPosition(serviceName, intent, newSid, position)
+			addToPosition(serviceName, intentName, newSid, position)
 
 		case DeleteSid:
-			prompt := promptSelectIntent(serviceName)
-			_, intent, err := prompt.Run()
-			if err != nil {
-				fmt.Printf("Prompt failed %v\n", err)
-				return
-			}
-			prompt = promptSelectSidList(serviceName, intent)
+			prompt = promptSelectSidList(serviceName, intentName)
 			_, sid, err := prompt.Run()
 			if err != nil {
 				fmt.Printf("Prompt failed %v\n", err)
 				return
 			}
-			deleteSid(serviceName, intent, sid)
+			deleteSid(serviceName, intentName, sid)
 		}
 
-		// clearScreen()
-		fmt.Println("This is the new state of the service:")
-		prettyPrintService(serviceName)
-		fmt.Println("-------------------------------------")
+		clearScreen()
+
+		destinationAddress := intent.GetIpv6Address(serviceName)
+		sidList := intent.GetIntentSidList(serviceName, intentName)
+		ui.messagingChannels.ChMessageIntentResponse <- &api.PathResult{
+			Ipv6DestinationAddress: destinationAddress,
+			Intents: []*api.Intent{
+				{Type: intent.StringToIntentType(intentName)},
+			},
+			Ipv6SidAddresses: sidList,
+		}
 	}
 }
