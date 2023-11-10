@@ -37,15 +37,6 @@ func (i *IntentHandler) handleRequest() {
 	}
 }
 
-// func GetIntentDetails(domainName string, intentType string) ([]string, error) {
-// 	for _, service := range config.Params.Services[domainName] {
-// 		if service.Intent == intentType {
-// 			return service.Sid, nil
-// 		}
-// 	}
-// 	return nil, fmt.Errorf("no intent found for domain %s and intent type %s", domainName, intentType)
-// }
-
 func GetIntentSidList(destAddr string, intentType string) []string {
 	for _, service := range config.Params.Services {
 		if slices.Contains(service.Ipv6Addresses, destAddr) {
@@ -57,4 +48,13 @@ func GetIntentSidList(destAddr string, intentType string) []string {
 		}
 	}
 	return nil
+}
+
+func GetIpv6Address(serviceName string) string {
+	for key, service := range config.Params.Services {
+		if key == serviceName {
+			return service.Ipv6Addresses[0]
+		}
+	}
+	return ""
 }
