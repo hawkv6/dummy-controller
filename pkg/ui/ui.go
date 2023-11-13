@@ -95,13 +95,14 @@ func (ui *UI) Start() {
 		clearScreen()
 
 		destinationAddress := intent.GetIpv6Address(serviceName)
-		sidList := intent.GetIntentSidList(serviceName, intentName)
-		ui.messagingChannels.ChMessageIntentResponse <- &api.PathResult{
+		sidList := intent.GetIntentSidList(destinationAddress, intentName)
+		pathResult := &api.PathResult{
 			Ipv6DestinationAddress: destinationAddress,
 			Intents: []*api.Intent{
 				{Type: intent.StringToIntentType(intentName)},
 			},
 			Ipv6SidAddresses: sidList,
 		}
+		ui.messagingChannels.ChMessageIntentResponse <- pathResult
 	}
 }
