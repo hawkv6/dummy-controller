@@ -1,12 +1,14 @@
 package ui
 
 import (
+	"reflect"
+
 	"github.com/hawkv6/dummy-controller/internal/config"
 )
 
-func deleteSid(domainName string, intent string, sid string) {
+func deleteSid(domainName string, intentList []string, sid string) {
 	for k, i := range config.Params.Services[domainName].Intents {
-		if i.Intent == intent {
+		if reflect.DeepEqual(i.IntentList, intentList) {
 			for j, s := range i.Sid {
 				if s == sid {
 					config.Params.Services[domainName].Intents[k].Sid = append(i.Sid[:j], i.Sid[j+1:]...)
@@ -17,9 +19,9 @@ func deleteSid(domainName string, intent string, sid string) {
 	}
 }
 
-func changeSidValue(domainName string, intent string, sid string, newValue string) {
+func changeSidValue(domainName string, intentList []string, sid string, newValue string) {
 	for k, i := range config.Params.Services[domainName].Intents {
-		if i.Intent == intent {
+		if reflect.DeepEqual(i.IntentList, intentList) {
 			for j, s := range i.Sid {
 				if s == sid {
 					config.Params.Services[domainName].Intents[k].Sid[j] = newValue
@@ -30,19 +32,19 @@ func changeSidValue(domainName string, intent string, sid string, newValue strin
 	}
 }
 
-func reorderSids(domainName string, intent string) {
+func reorderSids(domainName string, intentList []string) {
 	for k, i := range config.Params.Services[domainName].Intents {
-		if i.Intent == intent {
+		if reflect.DeepEqual(i.IntentList, intentList) {
 			config.Params.Services[domainName].Intents[k].Sid = append(i.Sid[1:], i.Sid[0])
 			return
 		}
 	}
 }
 
-func addToPosition(domainName string, intent string, sid string, position string) {
+func addToPosition(domainName string, intentList []string, sid string, position string) {
 	newSidList := []string{}
 	for k, i := range config.Params.Services[domainName].Intents {
-		if i.Intent == intent {
+		if reflect.DeepEqual(i.IntentList, intentList) {
 			switch position {
 			case AddFront:
 				newSidList = append(newSidList, sid)

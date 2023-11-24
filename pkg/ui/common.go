@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"reflect"
+	"strings"
 
 	"github.com/hawkv6/dummy-controller/internal/config"
 	"github.com/manifoldco/promptui"
@@ -58,34 +60,35 @@ func promptSelectService() promptui.Select {
 	}
 }
 
-func getSidList(domainName string, intentType string) []string {
-	sidList := []string{}
+func getSidList(domainName string, intentList []string) []string {
+	var sidList []string
 	for _, intent := range config.Params.Services[domainName].Intents {
-		if intent.Intent == intentType {
+		if reflect.DeepEqual(intent.IntentList, intentList) {
 			sidList = append(sidList, intent.Sid...)
 		}
 	}
 	return sidList
 }
 
-func promptSelectSidList(domainName string, intentType string) promptui.Select {
+func promptSelectSidList(domainName string, intentList []string) promptui.Select {
 	return promptui.Select{
 		Label: "Select a SID",
-		Items: getSidList(domainName, intentType),
+		Items: getSidList(domainName, intentList),
 	}
 }
 
 func getIntentList(domainName string) []string {
-	intentList := []string{}
+	var intentList []string
 	for _, intent := range config.Params.Services[domainName].Intents {
-		intentList = append(intentList, intent.Intent)
+		joinedIntentList := strings.Join(intent.IntentList, ", ")
+		intentList = append(intentList, joinedIntentList)
 	}
 	return intentList
 }
 
-func promptSelectIntent(domainName string) promptui.Select {
+func promptSelectIntentList(domainName string) promptui.Select {
 	return promptui.Select{
-		Label: "Select an Intent",
+		Label: "Select an Intent List to edit",
 		Items: getIntentList(domainName),
 	}
 }
@@ -98,7 +101,7 @@ func clearScreen() {
 
 func prettyPrintService(domainName string) {
 	for _, intent := range config.Params.Services[domainName].Intents {
-		fmt.Printf("Intent: %s\n", intent.Intent)
+		fmt.Printf("Intent List: %s\n", getIntentList(domainName))
 		fmt.Printf("SIDs: %v\n", intent.Sid)
 	}
 }
