@@ -2,8 +2,8 @@ package ui
 
 import (
 	"fmt"
+	"strings"
 
-	"github.com/hawkv6/dummy-controller/pkg/api"
 	"github.com/hawkv6/dummy-controller/pkg/intent"
 	"github.com/hawkv6/dummy-controller/pkg/messaging"
 	"github.com/manifoldco/promptui"
@@ -34,8 +34,9 @@ func (ui *UI) Start() {
 			fmt.Printf("Prompt failed %v\n", err)
 			return
 		}
-		prompt = promptSelectIntent(serviceName)
-		_, intentName, err := prompt.Run()
+		prompt = promptSelectIntentList(serviceName)
+		_, intentListString, err := prompt.Run()
+		intentList := strings.Split(intentListString, ", ")
 		if err != nil {
 			fmt.Printf("Prompt failed %v\n", err)
 			return
@@ -43,10 +44,10 @@ func (ui *UI) Start() {
 
 		switch action {
 		case ReorderSids:
-			reorderSids(serviceName, intentName)
+			reorderSids(serviceName, intentList)
 
 		case ChangeSidValues:
-			prompt = promptSelectSidList(serviceName, intentName)
+			prompt = promptSelectSidList(serviceName, intentList)
 			_, sid, err := prompt.Run()
 			if err != nil {
 				fmt.Printf("Prompt failed %v\n", err)
@@ -62,7 +63,7 @@ func (ui *UI) Start() {
 				return
 			}
 
-			changeSidValue(serviceName, intentName, sid, newValue)
+			changeSidValue(serviceName, intentList, sid, newValue)
 
 		case AddNewSid:
 			prompt = promptSelectAddingPosition()
@@ -80,29 +81,25 @@ func (ui *UI) Start() {
 				fmt.Printf("Prompt failed %v\n", err)
 				return
 			}
-			addToPosition(serviceName, intentName, newSid, position)
+			addToPosition(serviceName, intentList, newSid, position)
 
 		case DeleteSid:
-			prompt = promptSelectSidList(serviceName, intentName)
+			prompt = promptSelectSidList(serviceName, intentList)
 			_, sid, err := prompt.Run()
 			if err != nil {
 				fmt.Printf("Prompt failed %v\n", err)
 				return
 			}
-			deleteSid(serviceName, intentName, sid)
+			deleteSid(serviceName, intentList, sid)
 		}
 
 		clearScreen()
 
-		destinationAddress := intent.GetIpv6Address(serviceName)
-		sidList := intent.GetIntentSidList(destinationAddress, intentName)
-		pathResult := &api.PathResult{
-			Ipv6DestinationAddress: destinationAddress,
-			Intents: []*api.Intent{
-				{Type: intent.StringToIntentType(intentName)},
-			},
-			Ipv6SidAddresses: sidList,
+		destinationAddresses := intent.GetIpv6Addresses(serviceName)
+		pathResults := intent.CreatePathResults(destinationAddresses, intentList)
+
+		for _, pathResult := range pathResults {
+			ui.messagingChannels.ChMessageIntentResponse <- pathResult
 		}
-		ui.messagingChannels.ChMessageIntentResponse <- pathResult
 	}
 }

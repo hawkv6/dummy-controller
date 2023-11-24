@@ -6,15 +6,20 @@ services:
     ipv6_addresses:
       - fcbb:cc00:2::a
     intents:
-      - intent: low-latency
+      - intent_list: 
+          - low-latency
         sid:
           - fcbb:bb00:1::2
           - fcbb:bb00:3::2
-      - intent: high-latency
+      - intent_list: 
+          - high-latency
         sid:
           - fcbb:bb00:1::2
           - fcbb:bb00:3::2
-      - intent: flex-algo
+      - intent_list: 
+          - flex-algo
+          - low-latency
+          - low-bandwidth
         sid:
           - fcbb:bb00:1::2
           - fcbb:bb00:3::2
@@ -22,11 +27,13 @@ services:
     ipv6_addresses:
       - fcbb:cc00:3::a
     intents:
-      - intent: high-bandwidth
+      - intent_list: 
+          - high-bandwidth
         sid: 
           - fcbb:bb00:1::2
           - fcbb:bb00:3::2
-      - intent: flex-algo
+      - intent_list: 
+          - flex-algo
         sid: 
           - fcbb:bb00:1::2
           - fcbb:bb00:3::2
@@ -36,11 +43,14 @@ services:
       - fcbb:cc00:4::b
       - fcbb:cc00:4::c
     intents:
-      - intent: flex-algo
+      - intent_list: 
+          - flex-algo
+          - high-bandwidth
         sid: 
           - fcbb:bb00:1::2
           - fcbb:bb00:3::2
-      - intent: high-bandwidth
+      - intent_list: 
+          - high-bandwidth
         sid: 
           - fcbb:bb00:1::2
           - fcbb:bb00:3::2

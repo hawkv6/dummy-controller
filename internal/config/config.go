@@ -12,8 +12,8 @@ var (
 )
 
 type Intent struct {
-	Intent string   `mapstructure:"intent"`
-	Sid    []string `mapstructure:"sid"`
+	IntentList []string `mapstructure:"intent_list"`
+	Sid        []string `mapstructure:"sid"`
 }
 
 type ServiceConfig struct {
