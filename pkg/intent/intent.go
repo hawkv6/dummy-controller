@@ -31,28 +31,6 @@ func (i *IntentHandler) handleRequest() {
 	}
 }
 
-// func GetIntentSidList(destAddr string, intentType string) []string {
-// 	for _, service := range config.Params.Services {
-// 		if slices.Contains(service.Ipv6Addresses, destAddr) {
-// 			for _, intent := range service.Intents {
-// 				if intent.Intent == intentType {
-// 					return intent.Sid
-// 				}
-// 			}
-// 		}
-// 	}
-// 	return nil
-// }
-
-// func GetIpv6Address(serviceName string) string {
-// 	for key, service := range config.Params.Services {
-// 		if key == serviceName {
-// 			return service.Ipv6Addresses[0]
-// 		}
-// 	}
-// 	return ""
-// }
-
 func GetIpv6Addresses(serviceName string) []string {
 	for key, service := range config.Params.Services {
 		if key == serviceName {
