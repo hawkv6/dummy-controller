@@ -96,12 +96,7 @@ func promptSelectIntentList(domainName string) promptui.Select {
 func clearScreen() {
 	cmd := exec.Command("clear")
 	cmd.Stdout = os.Stdout
-	cmd.Run()
-}
-
-func prettyPrintService(domainName string) {
-	for _, intent := range config.Params.Services[domainName].Intents {
-		fmt.Printf("Intent List: %s\n", getIntentList(domainName))
-		fmt.Printf("SIDs: %v\n", intent.Sid)
+	if err := cmd.Run(); err != nil {
+		fmt.Println(err)
 	}
 }

@@ -101,21 +101,3 @@ func (s *MessagingServer) GetIntentPathResponse(stream api.IntentController_GetI
 		}
 	}
 }
-
-// func (s *MessagingServer) GetIntentDetails(ctx context.Context, i *api.Intent) (*api.Response, error) {
-// 	log.Default().Println("Received request for domain: " + i.DomainName)
-// 	sidList, err := intent.GetIntentDetails(i.DomainName, intent.IntentTypeToString(*i.Intent.Enum()))
-// 	if err != nil {
-// 		response := &api.Response{
-// 			Ipv6Addresses: nil,
-// 		}
-// 		return response, err
-// 	}
-// 	response := &api.Response{
-// 		DomainName:    i.DomainName,
-// 		Intent:        i.Intent,
-// 		Ipv6Addresses: sidList,
-// 	}
-
-// 	return response, nil
-// }

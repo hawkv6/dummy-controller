@@ -40,7 +40,7 @@ func GetIpv6Addresses(serviceName string) []string {
 	return nil
 }
 
-func CreatePathResults(daddresses []string, intentList []string) []*api.PathResult {
+func CreatePathResults(saddr string, daddresses []string, intentList []string) []*api.PathResult {
 	sidList := GetSidList(daddresses[0], intentList)
 	var pathResults []*api.PathResult
 	var intents []*api.Intent
@@ -51,6 +51,7 @@ func CreatePathResults(daddresses []string, intentList []string) []*api.PathResu
 	}
 	for _, daddr := range daddresses {
 		pathResults = append(pathResults, &api.PathResult{
+			Ipv6SourceAddress:      saddr,
 			Ipv6DestinationAddress: daddr,
 			Intents:                intents,
 			Ipv6SidAddresses:       sidList,
@@ -62,6 +63,7 @@ func CreatePathResults(daddresses []string, intentList []string) []*api.PathResu
 func CreatePathResultFromRequest(request *api.PathRequest) *api.PathResult {
 	sidList := GetSidList(request.Ipv6DestinationAddress, GetIntentsFromRequest(request))
 	return &api.PathResult{
+		Ipv6SourceAddress:      request.Ipv6SourceAddress,
 		Ipv6DestinationAddress: request.Ipv6DestinationAddress,
 		Intents:                request.Intents,
 		Ipv6SidAddresses:       sidList,
