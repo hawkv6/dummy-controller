@@ -96,7 +96,7 @@ func (ui *UI) Start() {
 		clearScreen()
 
 		destinationAddresses := intent.GetIpv6Addresses(serviceName)
-		pathResults := intent.CreatePathResults(destinationAddresses, intentList)
+		pathResults := intent.CreatePathResults("", destinationAddresses, intentList)
 
 		for _, pathResult := range pathResults {
 			ui.messagingChannels.ChMessageIntentResponse <- pathResult
